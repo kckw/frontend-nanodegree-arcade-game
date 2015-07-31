@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -91,12 +91,36 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
+        
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
         player.update();
+        
     }
 
+    function checkCollisions(){
+       // console.log ('[Engine]\t checkCollisions');
+        
+        var i=0;
+        var impact=false;
+        var playerX = player.x;
+        var currentEnemy;
+        while ( i < allEnemies.length && !impact ){
+            currentEnemy = allEnemies[i];
+            if ( player.row == currentEnemy.row ){
+                if ( Math.abs(playerX - currentEnemy.x ) < 50 ) impact=true;   
+            }
+            i++;
+        }
+        
+    
+        if (impact){
+            console.log ('[Engine]\t checkCollisions HIT');
+            player.reset();
+            currentEnemy.reset();
+        }
+    }
     /* This function initially draws the "game level", it will then call
      * the renderEntities function. Remember, this function is called every
      * game tick (or loop of the game engine) because that's how games work -
@@ -172,7 +196,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-princess-girl.png'
     ]);
     Resources.onReady(init);
 
